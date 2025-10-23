@@ -1,1 +1,43 @@
-no dej acrear vacio
+def planificar_compras(productos, presupuesto):
+    productos_ordenados = sorted(productos, key=lambda x: (-x[1], x[2]))
+    seleccion = []
+    total_gastado = 0
+    for nombre, prioridad, precio in productos_ordenados:
+        if total_gastado + precio <= presupuesto:
+            seleccion.append((nombre, precio))
+            total_gastado += precio
+    return seleccion, total_gastado
+
+def main():
+    try:
+        presupuesto = float(input("Ingresa tu presupuesto ($): "))
+        if presupuesto <= 0:
+            raise ValueError
+        productos = []
+        print("\nIngresa los productos (nombre, prioridad [1-5], precio). Escribe 'fin' para terminar.")
+        while True:
+            nombre = input("Nombre del producto (o 'fin' para terminar): ")
+            if nombre.lower() == 'fin':
+                break
+            prioridad = int(input("Prioridad (1-5, 1=más importante): "))
+            if not 1 <= prioridad <= 5:
+                raise ValueError
+            precio = float(input("Precio ($): "))
+            if precio <= 0:
+                raise ValueError
+            productos.append((nombre, prioridad, precio))
+        if not productos:
+            print("No se ingresaron productos.")
+            return
+        seleccion, total_gastado = planificar_compras(productos, presupuesto)
+        print("\nProductos seleccionados:")
+        print("-" * 40)
+        for nombre, precio in seleccion:
+            print(f"{nombre}: ${precio:.2f}")
+        print(f"\nTotal gastado: ${total_gastado:.2f}")
+        print(f"Presupuesto restante: ${(presupuesto - total_gastado):.2f}")
+    except ValueError:
+        print("Error: Ingresa valores numéricos válidos.")
+
+if __name__ == "__main__":
+    main()
