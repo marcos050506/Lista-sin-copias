@@ -1,0 +1,12 @@
+% Predicado principal: eliminar_duplicados(ListaOriginal, ListaSinDuplicados)
+eliminar_duplicados([], []). % Caso base: lista vacía
+eliminar_duplicados([X|Xs], Resultado) :-
+    miembro(X, Xs), % Si X aparece en el resto de la lista
+    eliminar_duplicados(Xs, Resultado). % Ignora X y continúa
+eliminar_duplicados([X|Xs], [X|Resultado]) :-
+    \+ miembro(X, Xs), % Si X no aparece en el resto de la lista
+    eliminar_duplicados(Xs, Resultado).
+
+% Predicado auxiliar para verificar si un elemento está en la lista
+miembro(X, [X|_]).
+miembro(X, [_|Xs]) :- miembro(X, Xs).
